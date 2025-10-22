@@ -20,15 +20,15 @@ jobs:
           REPO_URL: https://github.com/${{ github.repository }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "🔑 Cloning repo manually..."
+          echo "Cloning repo manually..."
           git clone https://x-access-token:${TOKEN}@github.com/${{ github.repository }} repo
           cd repo
-          echo "✅ Repository cloned successfully."
+          echo "Repository cloned successfully."
 
       - name: Detect file changes
         run: |
           cd repo
-          echo "🔍 Checking repository status..."
+          echo "Checking repository status..."
           git status
 
       - name: Configure Git identity
@@ -43,7 +43,7 @@ jobs:
         run: |
           cd repo
           git add .
-          git diff --quiet && echo "✅ No changes detected, skipping commit." || (
-            git commit -m "🤖 Auto-commit (manual clone) on $(date)"
+          git diff --quiet && echo "No changes detected, skipping commit." || (
+            git commit -m "Auto-commit (manual clone) on $(date)"
             git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }} HEAD:main
           )
