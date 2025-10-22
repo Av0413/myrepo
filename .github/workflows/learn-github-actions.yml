@@ -2,8 +2,7 @@ name: learn-github-actions
 on:
    push: 
        branches: [main]
-   pull_request:
-       branches: [ main ]
+   workflow_dispatch:
 
 jobs:
   demo:
@@ -11,50 +10,30 @@ jobs:
     steps:
       - name: greetings
         run: echo "Hello World!"
-  build:
-    runs-on: ubuntu-latest
-    steps:
+        
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npm test
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build, test]
-    if: github.ref == 'refs/heads/main'  # only run when pushing to main
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Deploy to production
+      - name: Detect file changes
         run: |
-          echo "🚀 Deploying application..."
-          # Add your deploy commands here (e.g., upload, rsync, or GitHub Pages)
+          echo "🔍 Checking repository status..."
+          git status
 
+      - name: Update files automatically
+        run: |
+          echo "🕒 Auto-updated at $(date)" > last_updated.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+
+          # Try to commit (if nothing changed, this command fails — so we handle it)
+          git commit -m "🤖 Auto-update on $(date)" || echo "✅ Nothing to commit, skipping."
+
+          # Push to GitHub
+          git push || echo "⚠️ Nothing new to push."
+   
