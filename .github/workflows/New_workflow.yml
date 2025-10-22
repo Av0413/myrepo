@@ -15,23 +15,19 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Detect file changes
-        run: |
-          echo "🔍 Checking repository status..."
+        run: 
+          echo "Checking repository status"
           git status
 
       - name: Update files automatically
-        run: |
-          echo "🕒 Auto-updated at $(date)" > last_updated.txt
+        run: 
+          echo "Auto-updated at $(date)" > last_updated.txt
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-
-          # Try to commit (if nothing changed, this command fails — so we handle it)
-          git commit -m "🤖 Auto-update on $(date)" || echo "✅ Nothing to commit, skipping."
-
-          # Push to GitHub
-          git push || echo "⚠️ Nothing new to push."
+          git commit -m "Auto-update on $(date)" || echo "Nothing to commit, skipping."
+          git push || echo "Nothing new to push."
 
