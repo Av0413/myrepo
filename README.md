@@ -31,3 +31,5 @@ This line was added by Tekton modify-and-push task
 This line was added by Tekton modify-and-push task
 
 This line was added by Tekton modify-and-push task
+
+This line was added by Tekton modify-and-push task
